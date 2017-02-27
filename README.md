@@ -18,7 +18,7 @@ Additionally, [Sergio Namias has built some Windows binaries (including a 32-bit
 
 Note - you will need to find/replace "dcraw-9.27-ms-64-bit.exe" in the solution if you compile or download a new binary.
 
-## dcraw manual
+### dcraw manual
 *nix [man page for dcraw](https://www.cybercom.net/~dcoffin/dcraw/dcraw.1.html)
 
 ## Bug Reporting
