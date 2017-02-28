@@ -1,7 +1,7 @@
 # dcraw-fltk
 
 ## Description
-Raw image processor utilizing the portable C++ 'Fast Light ToolKit' and Dave Coffin's C 'dcraw' program, compiled under Visual Studio 14 for Windows. This project is intended simply as a quick implementation of many C++ core concepts in a self-contained working program.
+Raw image processor utilizing the portable C++ 'Fast Light ToolKit' and Dave Coffin's C 'dcraw' program, compiled under Visual Studio 14 for Windows. This project does not yet implement all of the parameters for dcraw.
 
 Commenting style is as per Javadoc standards and can be generated from many third-party documentation programs. 
 
