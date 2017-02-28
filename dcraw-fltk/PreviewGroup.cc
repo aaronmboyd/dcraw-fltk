@@ -22,10 +22,9 @@
  * @param h - the height in pixels of the PreviewGroup
  * @param label - the label of the PreviewGroup
  */
-PreviewGroup::PreviewGroup(const int x, const int y, const int w, const int h, const char * label)
-: Fl_Group(x,y,w,h,label)
+PreviewGroup::PreviewGroup(const int x, const int y, const int w, const int h, const char * label) : Fl_Group(x,y,w,h,label)
 {
-  theBox = new Fl_Box(400,10,390,570);
+  theBox = new Fl_Box(x,y,w,h);
   loadImage("./default.bmp");
   end();
 }

@@ -32,6 +32,7 @@ class SettingsGroup : public Fl_Group
         ~SettingsGroup();
         void setImage(Image * theImage);
         void setBrowseFileText(const char * text);
+		void setDCRAWBrowseFileText(const char * text);
         void setPreview(PreviewGroup * thePreview);
         Image * getImage() const;   
 
@@ -46,10 +47,13 @@ class SettingsGroup : public Fl_Group
         Fl_Button * convertButton;
         Fl_Button * previewButton;
         Fl_Button * chooseFileButton;
+		Fl_Button * chooseDCRAWFileButton;
         Fl_Button * whiteBalanceText;
         Fl_Button * fileFormatText;
         Fl_Text_Display * browseFileText;
+		Fl_Text_Display * browseDCRAWFileText;
         Fl_Text_Buffer * filename;
+		Fl_Text_Buffer * pathToDCRAW;
 
         Fl_Check_Button * interpolateRGBG;
 
@@ -68,7 +72,8 @@ class SettingsGroup : public Fl_Group
         Fl_Round_Button * ppm_16Format;
         Fl_Round_Button * psdFormat;
                
-        Fl_File_Chooser * fileChooser;        
+        Fl_File_Chooser * fileChooser;
+		Fl_File_Chooser * dcrawFileChooser;
 
         Fl_Group * whiteBalanceGroup;
         Fl_Group * fileFormatGroup;
@@ -77,6 +82,7 @@ class SettingsGroup : public Fl_Group
         static void convertButtonPressed(Fl_Widget * theObject, void * data);
         static void previewButtonPressed(Fl_Widget * theObject, void * data);
         static void chooseFilePressed(Fl_Widget * theObject, void * data);
+		static void chooseDCRAWFilePressed(Fl_Widget * theObject, void * data);
         static void fileFormatChanged(Fl_Widget * theObject, void * data);
         static void whiteBalanceChanged(Fl_Widget * theObject, void * data);
 

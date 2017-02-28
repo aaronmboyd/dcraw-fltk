@@ -29,32 +29,53 @@
  */
 SettingsGroup::SettingsGroup(int x,int y,int w,int h, const char * label) : Fl_Group(x,y,w,h,label)
 {
+	int yPosition = 20;
+	int xPositionColumn1 = 20;
+	int xColumn1Inset = xPositionColumn1 + 20;
+	int xPositionColumn2 = 240;
+	int xColumn2Inset = xPositionColumn2 + 20;
+
     // Choose file button
-    chooseFileButton = new Fl_Button(40,20,140,30,"Browse for file...");
+    chooseFileButton = new Fl_Button(xPositionColumn1, yPosition, 200, 50,"Browse for raw image...");
     chooseFileButton->callback(chooseFilePressed,this);
-    browseFileText = new Fl_Text_Display(200,20,140,40,"");
+    browseFileText = new Fl_Text_Display(xPositionColumn2, yPosition, 200, 50, "");
     filename = new Fl_Text_Buffer(1024);
-    filename->text("None Selected");
+    filename->text("Not selected");
     free(filename->text());
     browseFileText->buffer(filename);
 
-    // File format select
-    fileFormatGroup = new Fl_Group(40,65,320,100,"");
-    fileFormatText = new Fl_Button(100,80,0,0,"File Format (bits per sample)");
+	// Choose location of DCRAW
+	yPosition += 70;
+	chooseDCRAWFileButton = new Fl_Button(xPositionColumn1, yPosition, 200, 50, "Browse for DCRAW...");
+	chooseDCRAWFileButton->callback(chooseDCRAWFilePressed, this);
+	browseDCRAWFileText = new Fl_Text_Display(xPositionColumn2, yPosition, 200, 50, "");
+	pathToDCRAW = new Fl_Text_Buffer(1024);
+	pathToDCRAW->text("Not set");
+	free(pathToDCRAW->text());
+	browseDCRAWFileText->buffer(pathToDCRAW);
 
-    tiff_8Format = new Fl_Round_Button(70,95,20,20,"TIFF (8 bit)");
+    // File format select
+	yPosition += 70;
+    fileFormatGroup = new Fl_Group(xPositionColumn1, yPosition, 440, 100,"");
+	yPosition += 20;
+    fileFormatText = new Fl_Button((xPositionColumn1+60), yPosition, 0, 0, "File Format");
+	yPosition += 20;
+    tiff_8Format = new Fl_Round_Button((xPositionColumn1 + 20), yPosition, 20, 20, "TIFF (8 bit)");
 	tiff_8Format->type(FL_RADIO_BUTTON);
 	tiff_8Format->callback(fileFormatChanged,this);
 
-    tiff_16Format = new Fl_Round_Button(70,115,20,20,"TIFF (16 bit)");
+	yPosition += 20;
+    tiff_16Format = new Fl_Round_Button((xPositionColumn1 + 20), yPosition, 20, 20, "TIFF (16 bit)");
 	tiff_16Format->type(FL_RADIO_BUTTON);
 	tiff_16Format->callback(fileFormatChanged,this);
 
-    ppm_8Format = new Fl_Round_Button(210,95,20,20,"PPM (8 bit)");
+	yPosition -= 20;
+    ppm_8Format = new Fl_Round_Button(xPositionColumn2, yPosition, 20, 20, "PPM (8 bit)");
 	ppm_8Format->type(FL_RADIO_BUTTON);
 	ppm_8Format->callback(fileFormatChanged,this);
 
-    ppm_16Format = new Fl_Round_Button(210,115,20,20,"PPM (16 bit)");
+	yPosition += 20;
+    ppm_16Format = new Fl_Round_Button(xPositionColumn2, yPosition, 20, 20, "PPM (16 bit)");
 	ppm_16Format->type(FL_RADIO_BUTTON);
 	ppm_16Format->callback(fileFormatChanged,this);
 
@@ -67,68 +88,84 @@ SettingsGroup::SettingsGroup(int x,int y,int w,int h, const char * label) : Fl_G
     fileFormatGroup->box(FL_EMBOSSED_BOX);
 
     // Interpolate RGBG check box
-    interpolateRGBG = new Fl_Check_Button(60,175,20,20,"Interpolate RGBG");
+	yPosition += 60;
+    interpolateRGBG = new Fl_Check_Button(xPositionColumn1, yPosition, 20, 20, "Interpolate RGBG" );
 
-    // Gamma and brightness sliders
-    gammaInput = new Fl_Value_Slider(60,205,260,30,"Gamma");
+    // Gamma slider
+	yPosition += 40;
+    gammaInput = new Fl_Value_Slider(xPositionColumn1, yPosition, 400, 40,"Gamma");
     gammaInput->type(FL_HOR_NICE_SLIDER);
     gammaInput->minimum(0.3);
     gammaInput->maximum(1.5);
     gammaInput->value(0.6);
 
-    brightnessInput = new Fl_Value_Slider(60,255,260,30,"Brightness");
+	// Brightness slider
+	yPosition += 60;
+    brightnessInput = new Fl_Value_Slider(xPositionColumn1, yPosition, 400, 40, "Brightness" );
     brightnessInput->type(FL_HOR_NICE_SLIDER);
     brightnessInput->minimum(1.0);
     brightnessInput->maximum(6.0);
     brightnessInput->value(3.5);
 
     // White balance mode select
-    whiteBalanceGroup = new Fl_Group(40,310,320,210,"");
-    cameraWhiteBalance = new Fl_Round_Button(60,350,20,20,"Camera");
+	yPosition += 80;
+    whiteBalanceGroup = new Fl_Group(xPositionColumn1, yPosition, 440, 240, "");
+
+	yPosition += 20;
+	whiteBalanceText = new Fl_Button((xPositionColumn1 + 80), yPosition, 0, 0, "White Balance Mode" );
+
+	yPosition += 20;
+    cameraWhiteBalance = new Fl_Round_Button(xColumn1Inset, yPosition, 20, 20, "Camera" );
     cameraWhiteBalance->type(FL_RADIO_BUTTON);
     cameraWhiteBalance->callback(whiteBalanceChanged,this);
 
-    autoWhiteBalance = new Fl_Round_Button(170,350,20,20,"Auto");
+    autoWhiteBalance = new Fl_Round_Button(xColumn1Inset + 120, yPosition, 20, 20, "Auto" );
     autoWhiteBalance->type(FL_RADIO_BUTTON);
     autoWhiteBalance->callback(whiteBalanceChanged,this);
 
-    manualWhiteBalance = new Fl_Round_Button(260,350,20,20,"Manual");
+    manualWhiteBalance = new Fl_Round_Button(xColumn1Inset + 120 + 120, yPosition, 20, 20, "Manual" );
     manualWhiteBalance->type(FL_RADIO_BUTTON);
     manualWhiteBalance->callback(whiteBalanceChanged,this);
 
     whiteBalanceGroup->box(FL_EMBOSSED_BOX);
+	whiteBalanceGroup->add(whiteBalanceText);
     whiteBalanceGroup->add(cameraWhiteBalance);
     whiteBalanceGroup->add(autoWhiteBalance);
     whiteBalanceGroup->add(manualWhiteBalance);
 
     // White balance manual mode sliders
-    redMultiplier = new Fl_Value_Slider(60,390,260,30,"Red Multiplier (1.0 = daylight)");
+	yPosition += 40;
+	redMultiplier = new Fl_Value_Slider(xColumn1Inset, yPosition, 360, 40, "Red Multiplier (1.0 = daylight)");
     redMultiplier->type(FL_HOR_NICE_SLIDER);
     redMultiplier->minimum(0.5);
     redMultiplier->maximum(2.0);
     redMultiplier->value(1.0);
     redMultiplier->deactivate();
 
-    blueMultiplier = new Fl_Value_Slider(60,450,260,30,"Blue Multiplier (1.0 = daylight)");
+	yPosition += 60;
+    blueMultiplier = new Fl_Value_Slider(xColumn1Inset, yPosition, 360, 40, "Blue Multiplier (1.0 = daylight)");
     blueMultiplier->type(FL_HOR_NICE_SLIDER);
     blueMultiplier->minimum(0.5);
     blueMultiplier->maximum(2.0);
     blueMultiplier->value(1.0);
     blueMultiplier->deactivate();
 
-    whiteBalanceText = new Fl_Button(120,330,0,0,"White Balance Mode");
     whiteBalanceGroup->add(redMultiplier);
     whiteBalanceGroup->add(blueMultiplier);
 
     // Action Buttons
-    previewButton = new Fl_Button(40,540,140,30,"Preview");
+	yPosition += 120;
+	previewButton = new Fl_Button(xColumn1Inset, yPosition, 140, 40, "Preview" );
     previewButton->callback(previewButtonPressed,this);
-    convertButton = new Fl_Button(220,540,140,30,"Convert");
+
+	convertButton = new Fl_Button(xPositionColumn2, yPosition, 140, 40, "Convert" );
     convertButton->callback(convertButtonPressed,this);
 
     // Add to group (order irrelevant)
     this->add(chooseFileButton);
     this->add(browseFileText);
+	this->add(chooseDCRAWFileButton);
+	this->add(browseDCRAWFileText);
     this->add(fileFormatGroup);
     this->add(interpolateRGBG);
     this->add(gammaInput);
@@ -173,6 +210,16 @@ void SettingsGroup::setBrowseFileText(const char * text)
 }
 
 /**
+* Sets the label text box with new text
+* @param text - the new text
+*/
+void SettingsGroup::setDCRAWBrowseFileText(const char * text)
+{
+	this->pathToDCRAW->text(text);
+	free(pathToDCRAW->text());
+}
+
+/**
  * @param thePreview - the pointer to the PreviewGroup window
  */
 void SettingsGroup::setPreview(PreviewGroup * thePreview)
@@ -207,18 +254,28 @@ void SettingsGroup::convertButtonPressed(Fl_Widget * theObject, void * data)
     access->deactivate();
     access->createImage();
 
-  if(access->filename->text() == "None Selected")
-  {
-    fl_message("You have not selected a file!");
-    access->activate();
-    return;
-  }
+	string file = access->filename->text();
+	if (file == "Not selected")
+	{
+		fl_message("Please select a raw image first");
+		access->activate();
+		return;
+	}
+	free(access->filename->text());
+
+	file = access->pathToDCRAW->text();
+	if (file == "Not set")
+	{
+		fl_message("Please select the path to DRCRAW first");
+		access->activate();
+		return;
+	}
+	free(access->pathToDCRAW->text());
 
   // Convert Image for real
   Converter * theConverter = new Converter();
   theConverter->setImage(access->theImage);
-  //theConverter->setExecutable("dcraw");
-  theConverter->setExecutable("dcraw-9.27-ms-64-bit.exe");
+  theConverter->setExecutable(access->pathToDCRAW->text());
   theConverter->run(false);
   delete theConverter;
 
@@ -244,17 +301,28 @@ void SettingsGroup::previewButtonPressed(Fl_Widget * theObject, void * data)
     access->deactivate();
     access->createImage();
    
-	if(access->filename->text() == "None Selected")
-    {
-        fl_message("You have not selected a file!");
-        access->activate();
-        return;
-    }
+	string file = access->filename->text();
+	if (file == "Not selected")
+	{
+		fl_message("Please select a raw image first");
+		access->activate();
+		return;
+	}
+	free(access->filename->text());
+
+	file = access->pathToDCRAW->text();
+	if (file == "Not set")
+	{
+		fl_message("Please select the path to DRCRAW first");
+		access->activate();
+		return;
+	}
+	free(access->pathToDCRAW->text());
 
 	// Convert Image
 	Converter * theConverter = new Converter();
 	theConverter->setImage(access->theImage);
-	theConverter->setExecutable("dcraw-9.27-ms-64-bit.exe");
+	theConverter->setExecutable(access->pathToDCRAW->text());
 
 	// Running in preview mode will override file format and default to PPM
 	theConverter->run(true);
@@ -284,7 +352,7 @@ void SettingsGroup::chooseFilePressed(Fl_Widget * theObject, void * data)
 {
     SettingsGroup * access = static_cast<SettingsGroup *>(data);
 
-    access->fileChooser = new Fl_File_Chooser(".","RAW Image Files (*.{crw,raw})",FL_SINGLE,"Select a file...");
+    access->fileChooser = new Fl_File_Chooser(".","RAW Image Files (*.{crw,raw,rw2})",FL_SINGLE,"Select a file...");
     access->fileChooser->show();
 
     while (access->fileChooser->visible())
@@ -298,6 +366,35 @@ void SettingsGroup::chooseFilePressed(Fl_Widget * theObject, void * data)
     }
 
     access->redraw();
+}
+
+/**
+* static callback method for DCRAW file chooser
+* This method does not need to be explicitly called from the code
+* Fl_Widgets that have this method set as their callback will enter
+* this method on certain events
+* @param theObject - the calling object
+* @param data - pointer to data (usually the "this" keyword, to give this
+*                                function access to non-static members of this class)
+*
+*/
+void SettingsGroup::chooseDCRAWFilePressed(Fl_Widget * theObject, void * data)
+{
+	SettingsGroup * access = static_cast<SettingsGroup *>(data);
+
+	access->dcrawFileChooser = new Fl_File_Chooser(".", "Executable (*.{exe})", FL_SINGLE, "Select path to DCRAW file...");
+	access->dcrawFileChooser->show();
+
+	while (access->dcrawFileChooser->visible())
+		Fl::wait();
+
+	if (access->dcrawFileChooser->value() != 0)
+	{
+		const char * pathToDCRAW = access->dcrawFileChooser->value();
+		access->setDCRAWBrowseFileText(pathToDCRAW);
+	}
+
+	access->redraw();
 }
 
 /**

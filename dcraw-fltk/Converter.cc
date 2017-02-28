@@ -173,18 +173,21 @@ int Converter::run(bool preview)
 	setArguments(args.str());
 
 	ostringstream final;
+	final << "\"";
 
  	// Add executable
-    final << getExecutable() << " ";
+    final << "\"" << getExecutable() << "\" ";
     // Add arguments
     final << getArguments();
     // Add source filename
-    final << theImage->getSourceFilename();
+    final << "\"" << theImage->getSourceFilename() << "\"";
+
+	final << "\"";
 
 	// Make system call
 	try
 	{
-		cout << "About to system call " << final.str();
+		cout << "\nAbout to system call " << final.str();
 		system(final.str().c_str());
 	}
 	catch(...)

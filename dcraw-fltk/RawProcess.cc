@@ -20,28 +20,28 @@
 using namespace std;
 
 // Window size constants
-const static int WIDTH = 800;
-const static int HEIGHT = 600;
-const static int X = 200;
+const static int WIDTH = 1200;
+const static int HEIGHT = 800;
+const static int X = 500;
 const static int Y = 200;
-const static int SETTINGS_WIDTH = 380;
-const static int SETTINGS_HEIGHT = 580;
+const static int SETTINGS_WIDTH = 480;
+const static int SETTINGS_HEIGHT = 780;
 const static int SETTINGS_X = 10;
 const static int SETTINGS_Y = 10;
-const static int PREVIEW_WIDTH = 390;
-const static int PREVIEW_HEIGHT = 570;
-const static int PREVIEW_X = 400;
+const static int PREVIEW_WIDTH = 680;
+const static int PREVIEW_HEIGHT = 780;
+const static int PREVIEW_X = 500;
 const static int PREVIEW_Y = 10;
 
 int main(int argc, char **argv)
 {
-    Fl_Window * theWindow = new Fl_Window(X,Y,WIDTH,HEIGHT,"RAWConvert 0.1.0");
+    Fl_Window * theWindow = new Fl_Window(X,Y,WIDTH,HEIGHT,"dcraw-fltk");
 
     fl_register_images();
 
     PreviewGroup * thePreview = new PreviewGroup(PREVIEW_X,PREVIEW_Y,PREVIEW_WIDTH,PREVIEW_HEIGHT,"");
-
     SettingsGroup * theSettings = new SettingsGroup(SETTINGS_X,SETTINGS_Y,SETTINGS_WIDTH,SETTINGS_HEIGHT,"");
+
     theSettings->setImage(new Image());
     theSettings->setPreview(thePreview);
 
